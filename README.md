@@ -33,6 +33,7 @@ mysql_secure_installation
 >>>Type password<<<
 ```
 
+Install
 Create database:
 ```bash
 > create database ftp;
@@ -41,6 +42,7 @@ Create database:
 ```
 
 Import database:
+
 Import file ftp.sql to database created earlier
 ```bash
 mysql -u root -p [DB Name] < [Dir File DB].sql
@@ -51,3 +53,40 @@ Use this query to insert user access to ftp server:
 INSERT INTO www VALUES ('user', password('[Password]'), '99', '99', '/home/test', '/bin/bash');
 ```
 
+### 4. Config proftpd
+
+Replace file proftpd.conf, remember change to your info
+
+### 5. Config SSL
+
+Install open-ssl
+```bash
+yum install openssl -y
+```
+
+Copy file proftpd_gen_ssl to /usr/local/bin/
+
+Run command:
+```bash
+chmod 777 /usr/local/bin/proftpd_gen_ssl
+mkdir -p /etc/ssl/private
+/usr/local/bin/proftpd_gen_ssl
+```
+Enter name of file cert & key: proftpd
+Input your info
+Check have yes cert?
+```bash
+ll /etc/ssl/private/
+ll /etc/ssl/certs/
+```
+### 6. Restart service
+
+```bash
+service proftpd restart
+systemctl enable proftpd
+```
+Change ID of 4paras to ID of user
+SQLMinUserGID
+SQLMinUserUID
+SQLDefaultGID
+SQLDefaultUID
